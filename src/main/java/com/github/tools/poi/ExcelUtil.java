@@ -32,9 +32,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 /**
- * excel操作工具类
+ * Excel操作工具类
  * 
- * 要求：POI_3.8+，Excel_2007+
+ * 要求：POI_3.8+，Excel_2003+
  * 
  * @author jiangyf
  * @date 2017年9月18日 下午6:26:23
@@ -45,15 +45,15 @@ public class ExcelUtil<T> implements Serializable {
 	/**
 	 * 内存中保留 n 条数据，以免内存溢出，其余写入硬盘
 	 */
-	private final int ROW_ACCESS_WINDOW_SIZE = 1000;
+	private static final int ROW_ACCESS_WINDOW_SIZE = 1000;
 	/**
 	 * 每个工作表存放最大记录数
 	 */
-	public final int SHEET_MAX_ROWS = 3;
+	public static final int SHEET_MAX_ROWS = 3;
 	/**
 	 * 默认工作表名
 	 */
-	public final String DEFAULT_SHEET_NAME = "Sheet";
+	public static final String DEFAULT_SHEET_NAME = "Sheet";
 	/**
 	 * 单元格默认列宽度
 	 */
