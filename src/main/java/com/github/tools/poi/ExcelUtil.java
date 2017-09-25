@@ -49,7 +49,7 @@ public class ExcelUtil<T> implements Serializable {
 	/**
 	 * 每个工作表存放最大记录数
 	 */
-	public static final int SHEET_MAX_ROWS = 3;
+	public static final int SHEET_MAX_ROWS = 50000;
 	/**
 	 * 默认工作表名
 	 */
@@ -73,7 +73,7 @@ public class ExcelUtil<T> implements Serializable {
 	 * @param dataList
 	 *            导出数据
 	 * @param sheetName
-	 *            工作表名字
+	 *            工作表名（传入null，表示使用默认工作表名）
 	 * @return
 	 */
 	public Workbook createWorkbook(List<T> dataList, String fileName, String sheetName) throws Exception {
@@ -86,6 +86,8 @@ public class ExcelUtil<T> implements Serializable {
 		} else {
 			throw new Exception("文件名或文件格式错误");
 		}
+		// 工作表名
+		sheetName = (sheetName == null || sheetName.trim().length() == 0) ? DEFAULT_SHEET_NAME : sheetName;
 		// 总记录数
 		int totalRows = dataList != null && dataList.size() >= 0 ? dataList.size() : 0;
 		// 工作表页数
@@ -96,7 +98,7 @@ public class ExcelUtil<T> implements Serializable {
 		for (int sheetNo = 0; sheetNo < sheetNum; sheetNo++) {
 			// 创建工作簿
 			Sheet sheet = workbook.createSheet();
-			// 设置工作表名称
+			// 设置工作表名
 			workbook.setSheetName(sheetNo, sheetName + (sheetNo + 1));
 			// 设置表格默认列宽度
 			sheet.setDefaultColumnWidth(DEFAULT_COLUMN_WIDTH);
@@ -339,12 +341,12 @@ public class ExcelUtil<T> implements Serializable {
 	 * @param fileName
 	 *            文件名
 	 * @param sheetName
-	 *            工作表名
+	 *            工作表名（传入null，表示使用默认工作表名）
 	 * @param response
 	 *            响应对象
 	 * @throws Exception
 	 */
-	public void wirteToHttpResponse(List<T> dataList, String fileName, String sheetName,
+	public void writeToHttpResponse(List<T> dataList, String fileName, String sheetName,
 			HttpServletResponse response) throws Exception {
 		Workbook workbook = createWorkbook(dataList, fileName, sheetName);
 		writeToHttpResponse(workbook, fileName, response);
@@ -400,14 +402,11 @@ public class ExcelUtil<T> implements Serializable {
 	 * @param path
 	 *            文件地址
 	 */
-	public void wirteToFilePath(List<T> dataList, String fileName, String sheetName, String path) {
+	public void writeToFilePath(List<T> dataList, String fileName, String sheetName, String path) {
 		File file = new File(path + fileName);
 		FileOutputStream fos = null;
 		try {
 			fos = new FileOutputStream(file);
-			if (sheetName == null || sheetName.trim().length() == 0) {
-				sheetName = DEFAULT_SHEET_NAME;
-			}
 			createWorkbook(dataList, fileName, sheetName).write(fos);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -429,7 +428,7 @@ public class ExcelUtil<T> implements Serializable {
 		list.add(new Dog(3, "c", "3"));
 		list.add(new Dog(4, "d", "4"));
 		list.add(new Dog(5, "e", "5"));
-		new ExcelUtil<>(Dog.class).wirteToFilePath(list, "a.xls", "dog", "D:\\");
+		new ExcelUtil<>(Dog.class).writeToFilePath(list, "a.xls", "dog", "D:\\");
 	}
 
 }
